@@ -5,3 +5,9 @@ interface Weather {
   city_id: string;
   created_at: string;
 }
+
+interface WeatherHourly {
+  hour: string;
+  humidity: number;
+  temperature: number;
+}
