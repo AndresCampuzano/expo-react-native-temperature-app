@@ -170,7 +170,7 @@ export default function Index() {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor }}
+      style={{ flex: 1, backgroundColor, flexGrow: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       {isLoadingHourlyRealData || isLoadingHourlyFutureData ? (
