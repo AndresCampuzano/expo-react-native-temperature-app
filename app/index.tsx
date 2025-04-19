@@ -13,7 +13,7 @@ import {
   getFutureWeatherRecords,
   getLast48HoursAverageWeatherRecords,
 } from '@/api/weather.service';
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   todayFutureWeather,
   todayWeather,
@@ -26,6 +26,7 @@ import { LineChart } from 'react-native-chart-kit';
 import { MoonEffect } from '@/components/MoonEffect';
 import { SunEffect } from '@/components/SunEffect';
 import { DropIcon } from '@/assets/icons/DropIcon';
+import { Clouds } from '@/components/Clouds';
 
 export default function Index() {
   const unifiedScrollRef = useRef<ScrollView>(null);
@@ -46,6 +47,7 @@ export default function Index() {
   const textColor = colorScheme === 'dark' ? '#FFFFFF' : '#000000';
   const chartLineColor = colorScheme === 'dark' ? '#d7d7d7' : '#F8BE28';
   const chartBackgroundColor = colorScheme === 'dark' ? '#b6b6b6' : '#F8BE28';
+  const cloudsColor = colorScheme === 'dark' ? 'rgba(161,181,245,0.2)' : 'rgba(255, 255, 255, 0.3)';
 
   const {
     data: hourlyRealData,
@@ -275,7 +277,7 @@ export default function Index() {
           <Text style={{ color: textColor }} className={'w-full text-center mt-9 text-2xl'}>
             Tomorrow's Forecast
           </Text>
-          <View className="mt-4">
+          <View className="mt-4 relative">
             {records?.tomorrow.map(item => (
               <View
                 key={item.forecast_for}
@@ -298,6 +300,15 @@ export default function Index() {
                 </View>
               </View>
             ))}
+            <Clouds
+              cloudConfigs={[
+                { size: 20, top: 320, duration: 8000, delay: 0 },
+                { size: 30, top: 180, duration: 10000, delay: 2000 },
+                { size: 12, top: 800, duration: 10000, delay: 2000 },
+                { size: 25, top: 450, duration: 12000, delay: 4000 },
+              ]}
+              cloudColor={cloudsColor}
+            />
           </View>
         </>
       )}
