@@ -49,7 +49,7 @@ export const Clouds = ({
           key={index}
           style={{
             position: 'absolute',
-            top: cloudTops[index], // Use the updated top value
+            top: cloudTops[index],
             width: config.size * 4,
             height: config.size * 2,
             backgroundColor: cloudColor,
