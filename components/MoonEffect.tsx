@@ -1,98 +1,38 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, View, Dimensions } from 'react-native';
+import React, { useRef } from 'react';
+import { Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Clouds } from './Clouds';
 
 export const MoonEffect = () => {
-  const screenWidth = Dimensions.get('window').width;
-
-  // Animated values for star opacity
   const starOpacity1 = useRef(new Animated.Value(0)).current;
   const starOpacity2 = useRef(new Animated.Value(0)).current;
   const starOpacity3 = useRef(new Animated.Value(0)).current;
   const starOpacity4 = useRef(new Animated.Value(0)).current;
 
-  // Animated values for cloud positions
-  const cloudPosition1 = useRef(new Animated.Value(-200)).current;
-  const cloudPosition2 = useRef(new Animated.Value(-300)).current;
+  const animateStar = (opacity: Animated.Value, delay: number) => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 1000,
+          delay,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
 
-  useEffect(() => {
-    // Animate star opacity
-    const animateStar = (opacity: Animated.Value, delay: number) => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration: 1000,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacity, {
-            toValue: 0,
-            duration: 1000,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    };
-
+  React.useEffect(() => {
     animateStar(starOpacity1, 0);
     animateStar(starOpacity2, 500);
     animateStar(starOpacity3, 1000);
     animateStar(starOpacity4, 1500);
-
-    // Animate clouds
-    const animateCloud = (position: Animated.Value, duration: number, delay: number) => {
-      Animated.sequence([
-        Animated.timing(position, {
-          toValue: screenWidth + 100, // Move off the right side of the screen
-          duration,
-          delay,
-          useNativeDriver: true,
-        }),
-        Animated.timing(position, {
-          toValue: -200, // Reset to the left, off-screen
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ]).start(() => animateCloud(position, duration, delay));
-    };
-
-    animateCloud(cloudPosition1, 10000, 0);
-    animateCloud(cloudPosition2, 12000, 3000);
-  }, [
-    starOpacity1,
-    starOpacity2,
-    starOpacity3,
-    starOpacity4,
-    cloudPosition1,
-    cloudPosition2,
-    screenWidth,
-  ]);
-
-  const Cloud = ({
-    position,
-    size,
-    top,
-  }: {
-    position: Animated.Value;
-    size: number;
-    top: number;
-  }) => (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        top,
-        width: size * 4,
-        height: size * 2,
-        backgroundColor: 'rgba(161,181,245,0.2)',
-        borderRadius: size,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        transform: [{ translateX: position }], // Use translateX for horizontal movement
-      }}
-    />
-  );
+  }, [starOpacity1, starOpacity2, starOpacity3, starOpacity4]);
 
   return (
     <>
@@ -169,8 +109,14 @@ export const MoonEffect = () => {
         }}
       />
       {/* Clouds */}
-      <Cloud position={cloudPosition1} size={20} top={50} />
-      <Cloud position={cloudPosition2} size={30} top={120} />
+      <Clouds
+        cloudConfigs={[
+          { size: 20, top: 50, duration: 10000, delay: 0 },
+          { size: 30, top: 120, duration: 12000, delay: 3000 },
+          { size: 25, top: 230, duration: 9000, delay: 5300 },
+        ]}
+        cloudColor="rgba(161,181,245,0.2)"
+      />
     </>
   );
 };
