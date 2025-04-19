@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native';
+import { ScrollView, Text, View, ActivityIndicator, RefreshControl } from 'react-native';
 import { MapPinIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useQuery } from '@tanstack/react-query';
@@ -9,18 +9,23 @@ import { calculateHourlyAverages, todayWeather } from '@/utils/date';
 export default function Index() {
   const [lastRecord, setLastRecord] = useState<Weather | null>(null);
   const [realRecords, setRealRecords] = useState<WeatherHourly[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['weather'],
     queryFn: getLast48HoursWeatherRecords,
   });
 
+  // Refetch every 30 seconds
   useEffect(() => {
-    // console.log({
-    //   data,
-    //   isLoading,
-    //   isError,
-    // });
+    const interval = setInterval(() => {
+      refetch();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [refetch]);
+
+  useEffect(() => {
     if (data && !isLoading && !isError) {
       setRealRecords(calculateHourlyAverages(todayWeather(data)));
 
@@ -28,8 +33,18 @@ export default function Index() {
       setLastRecord(lastRecord);
     }
   }, [data, isLoading, isError]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+
   return (
-    <View className={'flex-1'}>
+    <ScrollView
+      style={{ flex: 1 }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
       {isLoading ? (
         <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="black" />
@@ -78,6 +93,6 @@ export default function Index() {
           </ScrollView>
         </>
       )}
-    </View>
+    </ScrollView>
   );
 }
