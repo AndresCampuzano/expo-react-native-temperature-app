@@ -28,11 +28,11 @@ export const SquareItem = ({
           : 'Now'}
       </Text>
       <Text style={{ color: textColor }} className="text-2xl font-semibold mt-2">
-        {temperature.toFixed(0)}°C
+        {temperature.toFixed(0)}°
       </Text>
       <View className={'flex flex-row items-center mt-1'}>
         <DropIcon color={dropIconColor} size={18} />
-        <Text style={{ color: dropIconColor }} className="text-[19px] ml-1 ">
+        <Text style={{ color: dropIconColor }} className="text-[19px] ml-1 font-semibold">
           {humidity.toFixed(0)}%
         </Text>
       </View>

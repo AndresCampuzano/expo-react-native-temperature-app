@@ -48,7 +48,7 @@ export default function Index() {
   const textColor = colorScheme === 'dark' ? '#FFFFFF' : '#000000';
   const chartLineColor = colorScheme === 'dark' ? '#d7d7d7' : '#F8BE28';
   const chartBackgroundColor = colorScheme === 'dark' ? '#b6b6b6' : '#F8BE28';
-  const cloudsColor = colorScheme === 'dark' ? 'rgba(161,181,245,0.2)' : 'rgba(255, 255, 255, 0.3)';
+  const cloudsColor = colorScheme === 'dark' ? 'rgba(161,181,245,0.3)' : 'rgba(255, 255, 255, 0.4)';
 
   const {
     data: hourlyRealData,
@@ -307,9 +307,21 @@ export default function Index() {
                     hour12: true,
                   })}
                 </Text>
-                <Text style={{ color: textColor }} className="text-lg -ml-2">
-                  {item.temperature.toFixed(0)}°C
-                </Text>
+                <View className="flex flex-row items-center -mt-6">
+                  <MinMaxTemperature
+                    minTemperature={records?.tomorrow.reduce(
+                      (min, forecast) => Math.min(min, forecast.temperature),
+                      Infinity
+                    )}
+                    maxTemperature={records?.tomorrow.reduce(
+                      (max, forecast) => Math.max(max, forecast.temperature),
+                      -Infinity
+                    )}
+                    currentTemperature={item.temperature}
+                    textColor={textColor}
+                    basicUI={true}
+                  />
+                </View>
                 <View className="flex flex-row items-center">
                   <DropIcon color={textColor} size={20} />
                   <Text style={{ color: textColor }} className="text-lg ml-1">
