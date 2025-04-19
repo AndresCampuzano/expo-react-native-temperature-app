@@ -39,3 +39,32 @@ export function todayWeatherWithoutCurrentHourWeather(
     );
   });
 }
+
+/**
+ * Return the future weather records for today, excluding the real data.
+ */
+export function todayFutureWeather(
+  data: FutureWeather[],
+  realData: Weather[] | WeatherHourly[]
+): FutureWeather[] {
+  const today = new Date();
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+  const realDataDates = new Set(
+    realData.map(record =>
+      'created_at' in record
+        ? new Date(record.created_at).toISOString()
+        : new Date(record.hour).toISOString()
+    )
+  );
+
+  return data.filter(record => {
+    const recordDate = new Date(record.forecast_for);
+    return (
+      recordDate >= startOfToday &&
+      recordDate < endOfToday &&
+      !realDataDates.has(recordDate.toISOString())
+    );
+  });
+}

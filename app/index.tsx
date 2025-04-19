@@ -8,6 +8,7 @@ import {
 } from '@/api/weather.service';
 import { useEffect, useState } from 'react';
 import {
+  todayFutureWeather,
   todayWeather,
   todayWeatherWithoutCurrentHourWeather,
   yesterdayWeather,
@@ -20,7 +21,7 @@ export default function Index() {
     today: {
       previous: (WeatherHourly | Weather)[];
       current: WeatherHourly | Weather;
-      future: FutureWeather;
+      future: FutureWeather[];
     };
   } | null>(null);
 
@@ -58,10 +59,9 @@ export default function Index() {
         today: {
           previous: todayWeatherWithoutCurrentHourWeather(hourlyRealData),
           current: todayWeather(hourlyRealData)[todayWeather(hourlyRealData).length - 1],
-          future: hourlyFutureData,
+          future: todayFutureWeather(hourlyFutureData, hourlyRealData),
         },
       };
-      console.log(obj.today.future);
       setRecords(obj);
     }
   }, [
@@ -122,6 +122,7 @@ export default function Index() {
             </View>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={true} className="mt-4">
+            {/* today's weather */}
             {records?.today.previous?.map(item => (
               <View
                 key={(item as WeatherHourly).hour}
@@ -136,12 +137,25 @@ export default function Index() {
                 </Text>
               </View>
             ))}
+            {/* current hour weather */}
             <View className="m-2 p-4 pb-10 bg-gray-300 rounded-lg w-28">
               <Text className="text-lg font-bold">
                 {records?.today.current.temperature.toFixed(0)}°C
               </Text>
               <Text className="text-sm text-gray-500">Now</Text>
             </View>
+            {/* future weather */}
+            {records?.today.future?.map(item => (
+              <View key={item.forecast_for} className="m-2 p-4 pb-10 bg-white rounded-lg w-28">
+                <Text className="text-lg font-bold">{item.temperature.toFixed(0)}°C</Text>
+                <Text className="text-sm text-gray-500">
+                  {new Date(item.forecast_for).toLocaleTimeString([], {
+                    hour: 'numeric',
+                    hour12: true,
+                  })}
+                </Text>
+              </View>
+            ))}
           </ScrollView>
         </>
       )}
