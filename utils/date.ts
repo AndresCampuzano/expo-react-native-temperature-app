@@ -51,6 +51,20 @@ export function todayFutureWeather(
   const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
+  // Deduplicate data by keeping the most recent entry based on created_at
+  const uniqueDataMap = new Map<string, FutureWeather>();
+  data.forEach(record => {
+    const recordDate = new Date(record.forecast_for).toISOString();
+    if (
+      !uniqueDataMap.has(recordDate) ||
+      (record.created_at &&
+        new Date(record.created_at) > new Date(uniqueDataMap.get(recordDate)!.created_at!))
+    ) {
+      uniqueDataMap.set(recordDate, record);
+    }
+  });
+  const deduplicatedData = Array.from(uniqueDataMap.values());
+
   const realDataDates = new Set(
     realData.map(record =>
       'created_at' in record
@@ -59,7 +73,7 @@ export function todayFutureWeather(
     )
   );
 
-  return data.filter(record => {
+  return deduplicatedData.filter(record => {
     const recordDate = new Date(record.forecast_for);
     return (
       recordDate >= startOfToday &&
@@ -82,7 +96,20 @@ export function tomorrowFutureWeather(data: FutureWeather[]): FutureWeather[] {
     tomorrow.getDate() + 1
   );
 
-  return data.filter(record => {
+  // Deduplicate data by keeping the most recent entry based on created_at
+  const uniqueDataMap = new Map<string, FutureWeather>();
+  data.forEach(record => {
+    const recordDate = new Date(record.forecast_for).toISOString();
+    if (
+      !uniqueDataMap.has(recordDate) ||
+      (record.created_at &&
+        new Date(record.created_at) > new Date(uniqueDataMap.get(recordDate)!.created_at!))
+    ) {
+      uniqueDataMap.set(recordDate, record);
+    }
+  });
+
+  return Array.from(uniqueDataMap.values()).filter(record => {
     const recordDate = new Date(record.forecast_for);
     return recordDate >= startOfTomorrow && recordDate < endOfTomorrow;
   });

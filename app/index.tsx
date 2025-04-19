@@ -28,7 +28,6 @@ import { SunEffect } from '@/components/SunEffect';
 import { DropIcon } from '@/assets/icons/DropIcon';
 
 export default function Index() {
-  const horizontalScrollRef = useRef<ScrollView>(null);
   const unifiedScrollRef = useRef<ScrollView>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [records, setRecords] = useState<{
