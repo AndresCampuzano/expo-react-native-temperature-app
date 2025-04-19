@@ -47,9 +47,11 @@ export const Clouds = ({
             height: config.size * 2,
             backgroundColor: cloudColor,
             borderRadius: config.size,
+            // Updated shadow effect
             shadowColor: '#000',
-            shadowOpacity: 0.2,
-            shadowRadius: 5,
+            shadowOpacity: 0.08,
+            shadowOffset: { width: 10, height: 10 }, // Simulates light from top-right
+            shadowRadius: 0, // Remove blur for a sharp shadow
             transform: [{ translateX: cloudPositions[index] }],
           }}
         />
