@@ -350,50 +350,6 @@ export default function Index() {
           </View>
         </>
       )}
-
-      <MinMaxTemperature
-        minTemperature={1}
-        maxTemperature={10}
-        currentTemperature={1}
-        textColor={textColor}
-        basicUI={false}
-      />
-      <MinMaxTemperature
-        minTemperature={1}
-        maxTemperature={10}
-        currentTemperature={5}
-        textColor={textColor}
-        basicUI={false}
-      />
-      <MinMaxTemperature
-        minTemperature={1}
-        maxTemperature={10}
-        currentTemperature={10}
-        textColor={textColor}
-        basicUI={false}
-      />
-
-      <MinMaxTemperature
-        minTemperature={1}
-        maxTemperature={20}
-        currentTemperature={1}
-        textColor={textColor}
-        basicUI={false}
-      />
-      <MinMaxTemperature
-        minTemperature={1}
-        maxTemperature={20}
-        currentTemperature={10}
-        textColor={textColor}
-        basicUI={false}
-      />
-      <MinMaxTemperature
-        minTemperature={1}
-        maxTemperature={20}
-        currentTemperature={20}
-        textColor={textColor}
-        basicUI={false}
-      />
     </ScrollView>
   );
 }

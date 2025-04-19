@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, useColorScheme } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface MinMaxTemperatureProps {
@@ -17,8 +17,11 @@ export const MinMaxTemperature: React.FC<MinMaxTemperatureProps> = ({
   textColor,
   basicUI,
 }) => {
+  const colorScheme = useColorScheme();
+  const markerBgColor = colorScheme === 'dark' ? '#c8cfdc' : '#5e5e5e';
+
   const markerPosition =
-    ((currentTemperature - minTemperature) / (maxTemperature - minTemperature)) * 100;
+    ((currentTemperature - minTemperature) / (maxTemperature - minTemperature)) * 100 - 3;
 
   return (
     <View className="flex flex-col items-center mt-8 pb-8 min-w-24">
@@ -36,25 +39,37 @@ export const MinMaxTemperature: React.FC<MinMaxTemperatureProps> = ({
       </View>
       <View className="relative w-4/5">
         <LinearGradient
-          colors={['rgba(7,210,180,0.5)', 'rgba(7,210,34,0.5)', 'rgba(255,214,0,0.8)']}
+          colors={['rgba(7,210,180,0.5)', 'rgba(129,210,7,0.5)', 'rgba(255,214,0,0.8)']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{
             height: 10,
             width: '100%',
             marginTop: 8,
-            borderRadius: 5,
+            borderRadius: 3,
           }}
         />
         <View
-          className="absolute top-1 items-center"
+          className="absolute top-1"
           style={{
-            left: `${Math.min(Math.max(markerPosition - 3, 0), 100)}%`, // Ensure marker stays within bounds
-            transform: [{ translateX: -10 }], // Center the marker
+            left: `${Math.min(Math.max(markerPosition + 3, 0), 100)}%`,
           }}
         >
-          <View className="w-1.5 h-5 rounded-full bg-white" />
-          <Text style={{ color: textColor }} className="mt-1 text-2xl">
+          <View
+            style={{ width: 6, height: 20, borderRadius: 9999, backgroundColor: markerBgColor }}
+          />
+          <Text
+            style={{
+              position: 'absolute',
+              top: 16,
+              left: -14,
+              width: 40,
+              textAlign: 'center',
+              fontSize: basicUI ? 18 : 24,
+              color: textColor,
+              marginTop: 2,
+            }}
+          >
             {currentTemperature}°
           </Text>
         </View>
