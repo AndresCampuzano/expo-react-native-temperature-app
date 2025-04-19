@@ -284,12 +284,11 @@ export default function Index() {
                 <Text style={{ color: textColor }} className="text-lg w-20">
                   {new Date(item.forecast_for).toLocaleTimeString([], {
                     hour: 'numeric',
-                    minute: '2-digit',
                     hour12: true,
                   })}
                 </Text>
                 <Text style={{ color: textColor }} className="text-lg -ml-2">
-                  {item.temperature.toFixed(1)}°C
+                  {item.temperature.toFixed(0)}°C
                 </Text>
                 <View className="flex flex-row items-center">
                   <DropIcon color={textColor} size={20} />
