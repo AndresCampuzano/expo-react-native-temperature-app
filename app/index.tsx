@@ -184,7 +184,7 @@ export default function Index() {
           <View className={'relative flex justify-center flex-col mb-[5%]'}>
             {colorScheme === 'dark' ? <MoonEffect /> : <SunEffect />}
             <View className={'flex flex-col justify-center items-center text-center'}>
-              <View className={'mb-20 flex flex-row'}>
+              <View className={'mb-10 flex flex-row'}>
                 <View>
                   <Text style={{ color: textColor }} className={'text-[210px] font-extralight'}>
                     {records?.today.current.temperature.toFixed(0)}
@@ -271,6 +271,36 @@ export default function Index() {
               </View>
             </View>
           </ScrollView>
+
+          {/* Tomorrow's Forecast Table */}
+          <Text style={{ color: textColor }} className={'w-full text-center mt-9 text-2xl'}>
+            Tomorrow's Forecast
+          </Text>
+          <View className="mt-4">
+            {records?.tomorrow.map(item => (
+              <View
+                key={item.forecast_for}
+                className="flex flex-row justify-between items-center px-4 py-2 border-b border-gray-500"
+              >
+                <Text style={{ color: textColor }} className="text-lg w-20">
+                  {new Date(item.forecast_for).toLocaleTimeString([], {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                  })}
+                </Text>
+                <Text style={{ color: textColor }} className="text-lg -ml-2">
+                  {item.temperature.toFixed(1)}°C
+                </Text>
+                <View className="flex flex-row items-center">
+                  <DropIcon color={textColor} size={20} />
+                  <Text style={{ color: textColor }} className="text-lg ml-1">
+                    {item.humidity.toFixed(0)}%
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
         </>
       )}
     </ScrollView>
