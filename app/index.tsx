@@ -181,7 +181,7 @@ export default function Index() {
           <Text style={{ color: textColor }} className={'w-full text-center mt-9 text-2xl'}>
             Today
           </Text>
-          <View className={'relative flex justify-center flex-col'}>
+          <View className={'relative flex justify-center flex-col mb-[5%]'}>
             {colorScheme === 'dark' ? <MoonEffect /> : <SunEffect />}
             <View className={'flex flex-col justify-center items-center text-center'}>
               <View className={'mb-20 flex flex-row'}>
