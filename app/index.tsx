@@ -44,6 +44,8 @@ export default function Index() {
   const colorScheme = useColorScheme();
   const backgroundColor = colorScheme === 'dark' ? '#091857' : '#F0ECC6';
   const textColor = colorScheme === 'dark' ? '#FFFFFF' : '#000000';
+  const chartLineColor = colorScheme === 'dark' ? '#d7d7d7' : '#F8BE28';
+  const chartBackgroundColor = colorScheme === 'dark' ? '#b6b6b6' : '#F8BE28';
 
   const {
     data: hourlyRealData,
@@ -148,7 +150,7 @@ export default function Index() {
           records?.today.current.temperature || 0,
           ...(records?.today.future.map(item => item.temperature) || []),
         ],
-        color: () => '#F8BE28',
+        color: () => chartLineColor,
         strokeWidth: 2,
       },
     ],
@@ -208,7 +210,7 @@ export default function Index() {
                   backgroundGradientFrom: backgroundColor,
                   backgroundGradientTo: backgroundColor,
                   decimalPlaces: 1,
-                  color: () => '#F0ECC6',
+                  color: () => chartBackgroundColor,
                   propsForBackgroundLines: {
                     strokeWidth: 0,
                   },
