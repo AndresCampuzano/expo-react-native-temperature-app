@@ -117,7 +117,7 @@ export default function Index() {
     ((records?.today.previous.length || 0) +
       1 + // "Now" item
       (records?.today.future.length || 0)) *
-    112; // Width of each data item (adjust as needed)
+    112; // Width of each data item
 
   const chartData = {
     labels: [
