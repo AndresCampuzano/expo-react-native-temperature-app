@@ -223,7 +223,7 @@ export default function Index() {
                 }}
               />
               <View className="flex-row mt-4">
-                {/* today's weather */}
+                {/* today's weather previous records */}
                 {records?.today.previous?.map(item => (
                   <SquareItem
                     key={(item as WeatherHourly).hour}
@@ -231,6 +231,7 @@ export default function Index() {
                     humidity={item.humidity}
                     timestamp={(item as WeatherHourly).hour}
                     textColor={textColor}
+                    className="opacity-60"
                   />
                 ))}
                 {/* current hour weather */}
@@ -239,7 +240,7 @@ export default function Index() {
                   humidity={records?.today.current.humidity || 0}
                   textColor={textColor}
                 />
-                {/* today's future weather */}
+                {/* today's future weather records */}
                 {records?.today.future?.map(item => (
                   <SquareItem
                     key={item.forecast_for}

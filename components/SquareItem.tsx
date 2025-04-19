@@ -4,19 +4,21 @@ import { DropIcon } from '@/assets/icons/DropIcon';
 export const SquareItem = ({
   temperature,
   humidity,
-  timestamp,
   textColor,
+  timestamp,
+  className,
 }: {
   temperature: number;
   humidity: number;
-  timestamp?: string;
   textColor: string;
+  timestamp?: string;
+  className?: string;
 }) => {
   const colorScheme = useColorScheme();
   const dropIconColor = colorScheme === 'dark' ? '#607ce5' : '#f1b72a';
 
   return (
-    <View key={timestamp} className="m-2 p-4 pb-10 rounded-lg w-28 flex">
+    <View key={timestamp} className={`m-2 p-4 pb-10 rounded-lg w-28 flex ${className}`}>
       <Text style={{ color: textColor }} className={`${!timestamp ? 'font-bold' : ''}`}>
         {timestamp
           ? new Date(timestamp).toLocaleTimeString([], {
@@ -30,7 +32,7 @@ export const SquareItem = ({
       </Text>
       <View className={'flex flex-row items-center'}>
         <DropIcon color={dropIconColor} />
-        <Text style={{ color: dropIconColor }} className="text-lg ml-1 font-bold">
+        <Text style={{ color: dropIconColor }} className="text-lg ml-1 ">
           {humidity.toFixed(0)}%
         </Text>
       </View>
