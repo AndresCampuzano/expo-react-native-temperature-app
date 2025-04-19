@@ -22,6 +22,7 @@ import {
   yesterdayWeather,
 } from '@/utils/date';
 import { SquareItem } from '@/components/SquareItem';
+import { LineChart } from 'react-native-chart-kit';
 
 export default function Index() {
   const horizontalScrollRef = useRef<ScrollView>(null);
@@ -108,6 +109,39 @@ export default function Index() {
     setRefreshing(false);
   };
 
+  const chartData = {
+    labels: [
+      ...(records?.today.previous.map((item, index) =>
+        index % 2 === 0
+          ? new Date((item as WeatherHourly).hour).toLocaleTimeString([], {
+              hour: 'numeric',
+              hour12: true,
+            })
+          : ''
+      ) || []),
+      'Now',
+      ...(records?.today.future.map((item, index) =>
+        index % 2 === 0
+          ? new Date(item.forecast_for).toLocaleTimeString([], {
+              hour: 'numeric',
+              hour12: true,
+            })
+          : ''
+      ) || []),
+    ],
+    datasets: [
+      {
+        data: [
+          ...(records?.today.previous.map(item => item.temperature) || []),
+          records?.today.current.temperature || 0,
+          ...(records?.today.future.map(item => item.temperature) || []),
+        ],
+        color: () => '#F8BE28',
+        strokeWidth: 2,
+      },
+    ],
+  };
+
   return (
     <ScrollView
       style={{ flex: 1 }}
@@ -149,6 +183,31 @@ export default function Index() {
               </View>
             </View>
           </View>
+
+          {/* Minimal chart */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-4">
+            <LineChart
+              data={chartData}
+              width={screenWidth} // Full screen width
+              height={220}
+              chartConfig={{
+                backgroundColor: 'rgba(255,255,255,0)',
+                backgroundGradientFrom: 'rgba(255,255,255,0)',
+                backgroundGradientTo: 'rgba(255,255,255,0)',
+                decimalPlaces: 1,
+                color: () => '#F8BE28',
+                style: {
+                  borderRadius: 16,
+                },
+                propsForBackgroundLines: {
+                  strokeWidth: 0, // Remove grid lines
+                },
+              }}
+              bezier
+            />
+          </ScrollView>
+
+          {/* Horizontal ScrollView */}
           <ScrollView
             ref={horizontalScrollRef}
             horizontal
