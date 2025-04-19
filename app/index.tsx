@@ -94,6 +94,7 @@ export default function Index() {
     hourlyFutureData,
     isLoadingHourlyFutureData,
     isErrorHourlyFutureData,
+    refetchHourlyFutureData,
   ]);
 
   // Scroll to center the "Now" section
@@ -113,7 +114,6 @@ export default function Index() {
   const onRefresh = async () => {
     setRefreshing(true);
     await refetchHourlyRealData();
-    await refetchHourlyFutureData();
     setRefreshing(false);
   };
 
