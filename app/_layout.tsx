@@ -19,11 +19,10 @@ export default function RootLayout() {
         <Stack
           screenOptions={{
             headerShown: false,
-            contentStyle: { backgroundColor, color: textColor },
+            contentStyle: { backgroundColor },
           }}
         />
       </SafeAreaView>
     </QueryClientProvider>
   );
 }
-
