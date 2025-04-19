@@ -26,6 +26,7 @@ import { LineChart } from 'react-native-chart-kit';
 
 export default function Index() {
   const horizontalScrollRef = useRef<ScrollView>(null);
+  const isScrolling = useRef<'chart' | 'data' | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [records, setRecords] = useState<{
     yesterday: (WeatherHourly | Weather)[];
@@ -190,64 +191,57 @@ export default function Index() {
             </View>
           </View>
 
-          {/* Minimal chart */}
+          {/* Unified ScrollView */}
           <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="mt-4"
-            contentContainerStyle={{ width: chartWidth }}
-          >
-            <LineChart
-              data={chartData}
-              width={chartWidth} // Match chart width to data width
-              height={220}
-              chartConfig={{
-                backgroundColor: '#F0ECC6',
-                backgroundGradientFrom: '#F0ECC6',
-                backgroundGradientTo: '#F0ECC6',
-                decimalPlaces: 1,
-                color: () => 'black',
-                style: {
-                  borderRadius: 16,
-                },
-                propsForBackgroundLines: {
-                  strokeWidth: 0, // Remove grid lines
-                },
-              }}
-              bezier
-            />
-          </ScrollView>
-
-          {/* Horizontal ScrollView */}
-          <ScrollView
-            ref={horizontalScrollRef}
             horizontal
             showsHorizontalScrollIndicator={true}
-            className="mt-4"
+            contentContainerStyle={{ width: chartWidth }}
           >
-            {/* today's weather */}
-            {records?.today.previous?.map(item => (
-              <SquareItem
-                key={(item as WeatherHourly).hour}
-                temperature={item.temperature}
-                humidity={item.humidity}
-                timestamp={(item as WeatherHourly).hour}
+            <View>
+              {/* Chart */}
+              <LineChart
+                data={chartData}
+                width={chartWidth}
+                height={80}
+                chartConfig={{
+                  backgroundColor: '#F0ECC6',
+                  backgroundGradientFrom: '#F0ECC6',
+                  backgroundGradientTo: '#F0ECC6',
+                  decimalPlaces: 1,
+                  color: () => '#F8BE28',
+                  propsForBackgroundLines: {
+                    strokeWidth: 0,
+                  },
+                }}
+                bezier
               />
-            ))}
-            {/* current hour weather */}
-            <SquareItem
-              temperature={records?.today.current.temperature || 0}
-              humidity={records?.today.current.humidity || 0}
-            />
-            {/* today's future weather */}
-            {records?.today.future?.map(item => (
-              <SquareItem
-                key={item.forecast_for}
-                temperature={item.temperature}
-                humidity={item.humidity}
-                timestamp={item.forecast_for}
-              />
-            ))}
+              {/* Data */}
+              <View className="flex-row mt-4">
+                {/* today's weather */}
+                {records?.today.previous?.map(item => (
+                  <SquareItem
+                    key={(item as WeatherHourly).hour}
+                    temperature={item.temperature}
+                    humidity={item.humidity}
+                    timestamp={(item as WeatherHourly).hour}
+                  />
+                ))}
+                {/* current hour weather */}
+                <SquareItem
+                  temperature={records?.today.current.temperature || 0}
+                  humidity={records?.today.current.humidity || 0}
+                />
+                {/* today's future weather */}
+                {records?.today.future?.map(item => (
+                  <SquareItem
+                    key={item.forecast_for}
+                    temperature={item.temperature}
+                    humidity={item.humidity}
+                    timestamp={item.forecast_for}
+                  />
+                ))}
+              </View>
+            </View>
           </ScrollView>
         </>
       )}
