@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useColorScheme } from 'react-native';
@@ -15,14 +14,12 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <SafeAreaView style={{ flex: 1, backgroundColor }}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor },
-          }}
-        />
-      </SafeAreaView>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor },
+        }}
+      />
     </QueryClientProvider>
   );
 }
