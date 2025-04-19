@@ -109,6 +109,12 @@ export default function Index() {
     setRefreshing(false);
   };
 
+  const chartWidth =
+    ((records?.today.previous.length || 0) +
+      1 + // "Now" item
+      (records?.today.future.length || 0)) *
+    112; // Width of each data item (adjust as needed)
+
   const chartData = {
     labels: [
       ...(records?.today.previous.map((item, index) =>
@@ -185,17 +191,22 @@ export default function Index() {
           </View>
 
           {/* Minimal chart */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-4">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="mt-4"
+            contentContainerStyle={{ width: chartWidth }}
+          >
             <LineChart
               data={chartData}
-              width={screenWidth} // Full screen width
+              width={chartWidth} // Match chart width to data width
               height={220}
               chartConfig={{
-                backgroundColor: 'rgba(255,255,255,0)',
-                backgroundGradientFrom: 'rgba(255,255,255,0)',
-                backgroundGradientTo: 'rgba(255,255,255,0)',
+                backgroundColor: '#F0ECC6',
+                backgroundGradientFrom: '#F0ECC6',
+                backgroundGradientTo: '#F0ECC6',
                 decimalPlaces: 1,
-                color: () => '#F8BE28',
+                color: () => 'black',
                 style: {
                   borderRadius: 16,
                 },
