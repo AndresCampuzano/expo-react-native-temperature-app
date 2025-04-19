@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, useColorScheme, View } from 'react-native';
 import { DropIcon } from '@/assets/icons/DropIcon';
 
 export const SquareItem = ({
@@ -12,6 +12,9 @@ export const SquareItem = ({
   timestamp?: string;
   textColor: string;
 }) => {
+  const colorScheme = useColorScheme();
+  const dropIconColor = colorScheme === 'dark' ? '#607ce5' : '#e5ae23';
+
   return (
     <View key={timestamp} className="m-2 p-4 pb-10 rounded-lg w-28 flex">
       <Text style={{ color: textColor }} className={`${!timestamp ? 'font-bold' : ''}`}>
@@ -26,8 +29,8 @@ export const SquareItem = ({
         {temperature.toFixed(0)}°C
       </Text>
       <View className={'flex flex-row items-center'}>
-        <DropIcon color="#F8BE28" />
-        <Text style={{ color: '#F8BE28' }} className="text-lg ml-1 font-bold">
+        <DropIcon color={dropIconColor} />
+        <Text style={{ color: dropIconColor }} className="text-lg ml-1 font-bold">
           {humidity.toFixed(0)}%
         </Text>
       </View>

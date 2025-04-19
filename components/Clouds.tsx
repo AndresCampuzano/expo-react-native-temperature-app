@@ -11,9 +11,6 @@ export const Clouds = ({
   cloudColor: string;
 }) => {
   const cloudPositions = useRef(cloudConfigs.map(() => new Animated.Value(-200))).current;
-  const [cloudTops, setCloudTops] = useState(
-    cloudConfigs.map(config => config.top + (Math.random() * 20 - 15))
-  );
 
   useEffect(() => {
     cloudConfigs.forEach((config, index) => {
@@ -31,10 +28,6 @@ export const Clouds = ({
             useNativeDriver: true,
           }),
         ]).start(() => {
-          // Update the top position with a new random value
-          setCloudTops(prevTops =>
-            prevTops.map((top, i) => (i === index ? config.top + (Math.random() * 20 - 15) : top))
-          );
           animateCloud(position);
         });
       };
@@ -49,7 +42,7 @@ export const Clouds = ({
           key={index}
           style={{
             position: 'absolute',
-            top: cloudTops[index],
+            top: config.top,
             width: config.size * 4,
             height: config.size * 2,
             backgroundColor: cloudColor,
