@@ -34,7 +34,7 @@ export const MoonEffect = () => {
   return (
     <>
       <LinearGradient
-        colors={['#091857', 'rgba(9, 24, 87, 0.5)', 'rgba(255, 255, 255, 0)']}
+        colors={['#2944b4', 'rgba(48,86,243,0)']}
         style={{
           position: 'absolute',
           width: '75%',
@@ -42,10 +42,6 @@ export const MoonEffect = () => {
           borderRadius: 9999,
           alignSelf: 'center',
           zIndex: -1,
-          shadowColor: '#FFFFFF',
-          shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.5,
-          shadowRadius: 20,
         }}
       />
       <Animated.View
