@@ -26,7 +26,7 @@ import { LineChart } from 'react-native-chart-kit';
 
 export default function Index() {
   const horizontalScrollRef = useRef<ScrollView>(null);
-  const isScrolling = useRef<'chart' | 'data' | null>(null);
+  const unifiedScrollRef = useRef<ScrollView>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [records, setRecords] = useState<{
     yesterday: (WeatherHourly | Weather)[];
@@ -92,15 +92,15 @@ export default function Index() {
 
   // Scroll to center the "Now" section
   useEffect(() => {
-    if (horizontalScrollRef.current && records?.today.previous.length) {
+    if (unifiedScrollRef.current && records?.today.previous.length) {
       setTimeout(() => {
         const itemWidth = 112;
         const offset = (screenWidth - itemWidth) / 2;
-        horizontalScrollRef.current?.scrollTo({
+        unifiedScrollRef.current?.scrollTo({
           x: records.today.previous.length * itemWidth - offset,
           animated: true,
         });
-      }, 100);
+      }, 100); // Delay to ensure layout is ready
     }
   }, [records, screenWidth]);
 
@@ -193,8 +193,9 @@ export default function Index() {
 
           {/* Unified ScrollView */}
           <ScrollView
+            ref={unifiedScrollRef}
             horizontal
-            showsHorizontalScrollIndicator={true}
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ width: chartWidth }}
           >
             <View>
@@ -204,9 +205,9 @@ export default function Index() {
                 width={chartWidth}
                 height={80}
                 chartConfig={{
-                  backgroundColor: '#F0ECC6',
-                  backgroundGradientFrom: '#F0ECC6',
-                  backgroundGradientTo: '#F0ECC6',
+                  backgroundColor: 'transparent',
+                  backgroundGradientFrom: 'transparent',
+                  backgroundGradientTo: 'transparent',
                   decimalPlaces: 1,
                   color: () => '#F8BE28',
                   propsForBackgroundLines: {
