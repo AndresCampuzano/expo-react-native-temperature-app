@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import { DropIcon } from '@/assets/icons/DropIcon';
+import { ChevronUpIcon } from 'react-native-heroicons/outline';
 
 export const SquareItem = ({
   temperature,
@@ -11,8 +12,8 @@ export const SquareItem = ({
   timestamp?: string;
 }) => {
   return (
-    <View key={timestamp} className="m-2 p-4 pb-10  rounded-lg w-28">
-      <Text className="text-gray-500">
+    <View key={timestamp} className="m-2 p-4 pb-10 rounded-lg w-28 flex">
+      <Text className={`text-gray-500 ${!timestamp ? 'font-bold' : ''}`}>
         {timestamp
           ? new Date(timestamp).toLocaleTimeString([], {
               hour: 'numeric',
