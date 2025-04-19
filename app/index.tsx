@@ -35,7 +35,7 @@ export default function Index() {
     tomorrow: FutureWeather[];
   } | null>(null);
 
-  const screenWidth = Dimensions.get('window').width; // Dynamically get screen width
+  const screenWidth = Dimensions.get('window').width;
 
   const {
     data: hourlyRealData,
@@ -87,17 +87,17 @@ export default function Index() {
     refetchHourlyFutureData,
   ]);
 
+  // Scroll to center the "Now" section
   useEffect(() => {
     if (horizontalScrollRef.current && records?.today.previous.length) {
-      // Scroll to center the "Now" section
       setTimeout(() => {
-        const itemWidth = 112; // Approximate width of each card
-        const offset = (screenWidth - itemWidth) / 2; // Calculate offset to center the item
+        const itemWidth = 112;
+        const offset = (screenWidth - itemWidth) / 2;
         horizontalScrollRef.current?.scrollTo({
           x: records.today.previous.length * itemWidth - offset,
           animated: true,
         });
-      }, 100); // Delay to ensure layout is ready
+      }, 100);
     }
   }, [records, screenWidth]);
 
