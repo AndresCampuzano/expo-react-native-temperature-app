@@ -101,7 +101,7 @@ export default function Index() {
   useEffect(() => {
     if (unifiedScrollRef.current && records?.today.previous.length) {
       setTimeout(() => {
-        const itemWidth = 112;
+        const itemWidth = 111;
         const offset = (screenWidth - itemWidth) / 2;
         unifiedScrollRef.current?.scrollTo({
           x: records.today.previous.length * itemWidth - offset,
