@@ -168,17 +168,35 @@ export default function Index() {
             Today
           </Text>
           <View className={'relative flex justify-center flex-col'}>
-            <LinearGradient
-              colors={['#F8BE28', 'rgba(248, 190, 40, 0)']}
-              style={{
-                position: 'absolute',
-                width: '75%',
-                aspectRatio: 1,
-                borderRadius: 9999,
-                alignSelf: 'center',
-                zIndex: -1,
-              }}
-            />
+            {colorScheme === 'dark' ? (
+              <LinearGradient
+                colors={['#091857', 'rgba(9, 24, 87, 0.5)', 'rgba(255, 255, 255, 0)']}
+                style={{
+                  position: 'absolute',
+                  width: '75%',
+                  aspectRatio: 1,
+                  borderRadius: 9999,
+                  alignSelf: 'center',
+                  zIndex: -1,
+                  shadowColor: '#FFFFFF',
+                  shadowOffset: { width: 0, height: 10 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 20,
+                }}
+              />
+            ) : (
+              <LinearGradient
+                colors={['#F8BE28', 'rgba(248, 190, 40, 0)']}
+                style={{
+                  position: 'absolute',
+                  width: '75%',
+                  aspectRatio: 1,
+                  borderRadius: 9999,
+                  alignSelf: 'center',
+                  zIndex: -1,
+                }}
+              />
+            )}
             <View className={'flex flex-col justify-center items-center text-center'}>
               <View className={'my-3 flex flex-row'}>
                 <View>
@@ -217,7 +235,7 @@ export default function Index() {
                   backgroundGradientFrom: backgroundColor,
                   backgroundGradientTo: backgroundColor,
                   decimalPlaces: 1,
-                  color: () => '#F8BE28',
+                  color: () => '#F0ECC6',
                   propsForBackgroundLines: {
                     strokeWidth: 0,
                   },
