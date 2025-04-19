@@ -111,12 +111,6 @@ export default function Index() {
     }
   }, [records, screenWidth]);
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetchHourlyRealData();
-    setRefreshing(false);
-  };
-
   const chartWidth =
     ((records?.today.previous.length || 0) +
       1 + // "Now" item
@@ -154,6 +148,22 @@ export default function Index() {
         strokeWidth: 2,
       },
     ],
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await refetchHourlyRealData();
+      await refetchHourlyFutureData();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [refetchHourlyRealData, refetchHourlyFutureData]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetchHourlyRealData();
+    await refetchHourlyFutureData();
+    setRefreshing(false);
   };
 
   return (
