@@ -25,6 +25,7 @@ import { SquareItem } from '@/components/SquareItem';
 import { LineChart } from 'react-native-chart-kit';
 import { MoonEffect } from '@/components/MoonEffect';
 import { SunEffect } from '@/components/SunEffect';
+import { DropIcon } from '@/assets/icons/DropIcon';
 
 export default function Index() {
   const horizontalScrollRef = useRef<ScrollView>(null);
@@ -183,9 +184,9 @@ export default function Index() {
           <View className={'relative flex justify-center flex-col'}>
             {colorScheme === 'dark' ? <MoonEffect /> : <SunEffect />}
             <View className={'flex flex-col justify-center items-center text-center'}>
-              <View className={'my-3 flex flex-row'}>
+              <View className={'mb-20 flex flex-row'}>
                 <View>
-                  <Text style={{ color: textColor }} className={'text-[200px] font-extralight'}>
+                  <Text style={{ color: textColor }} className={'text-[210px] font-extralight'}>
                     {records?.today.current.temperature.toFixed(0)}
                   </Text>
                 </View>
@@ -195,10 +196,16 @@ export default function Index() {
                   </Text>
                 </View>
               </View>
-              <View className={'flex flex-col items-center justify-center'}>
-                <MapPinIcon color={textColor} size={32} />
-                <Text style={{ color: textColor }} className={'text-[170px] font-thin'}>
+              <View className={'flex flex-row items-center justify-center'}>
+                <MapPinIcon color={textColor} size={28} />
+                <Text style={{ color: textColor }} className={'text-3xl'}>
                   BOG
+                </Text>
+              </View>
+              <View className={'flex flex-row items-center justify-center'}>
+                <DropIcon color={textColor} size={35} />
+                <Text style={{ color: textColor }} className={'text-[110px] font-extralight'}>
+                  {records?.today.current.humidity.toFixed(0)}%
                 </Text>
               </View>
             </View>

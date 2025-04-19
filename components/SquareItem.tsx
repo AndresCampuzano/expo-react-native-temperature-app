@@ -31,7 +31,7 @@ export const SquareItem = ({
         {temperature.toFixed(0)}°C
       </Text>
       <View className={'flex flex-row items-center mt-1'}>
-        <DropIcon color={dropIconColor} />
+        <DropIcon color={dropIconColor} size={18} />
         <Text style={{ color: dropIconColor }} className="text-[19px] ml-1 ">
           {humidity.toFixed(0)}%
         </Text>

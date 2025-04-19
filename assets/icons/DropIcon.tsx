@@ -1,8 +1,8 @@
 import Svg, { Path } from 'react-native-svg';
 
-export const DropIcon = ({ color }: { color: string }) => {
+export const DropIcon = ({ color, size }: { color: string; size: number }) => {
   return (
-    <Svg width="15" height="20" viewBox="0 0 100 100">
+    <Svg width={size} height={size} viewBox="0 0 100 120">
       <Path
         d="M62.057,1.9c-2.084-2.529-6.487-2.543-8.6,0.017c-3.773,4.627-36.884,45.882-36.884,68.826
       c0,24.693,18.477,44.785,41.187,44.785c22.717,0,41.194-20.092,41.194-44.785C98.954,47.799,65.841,6.544,62.057,1.9z
