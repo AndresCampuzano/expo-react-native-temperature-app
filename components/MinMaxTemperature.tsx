@@ -18,23 +18,23 @@ export const MinMaxTemperature: React.FC<MinMaxTemperatureProps> = ({
   basicUI,
 }) => {
   const markerPosition =
-    ((currentTemperature - minTemperature) / (maxTemperature - minTemperature)) * 100 - 1;
+    ((currentTemperature - minTemperature) / (maxTemperature - minTemperature)) * 100;
 
   return (
-    <View className="flex flex-col items-center mt-8 pb-8">
+    <View className="flex flex-col items-center mt-8 pb-8 min-w-24">
       <View className="flex flex-row items-center justify-between w-full px-8">
         {!basicUI && (
           <>
             <Text style={{ color: textColor }} className="text-2xl font-semibold">
-              {minTemperature.toFixed(0)}°
+              {minTemperature}°
             </Text>
             <Text style={{ color: textColor }} className="text-2xl font-semibold">
-              {maxTemperature.toFixed(0)}°
+              {maxTemperature}°
             </Text>
           </>
         )}
       </View>
-      <View className="relative w-4/5 min-w-24">
+      <View className="relative w-4/5">
         <LinearGradient
           colors={['rgba(7,210,180,0.5)', 'rgba(7,210,34,0.5)', 'rgba(255,214,0,0.8)']}
           start={{ x: 0, y: 0 }}
@@ -47,12 +47,15 @@ export const MinMaxTemperature: React.FC<MinMaxTemperatureProps> = ({
           }}
         />
         <View
-          style={{ left: `${markerPosition}%` }}
-          className="absolute top-1 transform -translate-x-2.5 items-center shadow-2xl"
+          className="absolute top-1 items-center"
+          style={{
+            left: `${Math.min(Math.max(markerPosition - 3, 0), 100)}%`, // Ensure marker stays within bounds
+            transform: [{ translateX: -10 }], // Center the marker
+          }}
         >
           <View className="w-1.5 h-5 rounded-full bg-white" />
           <Text style={{ color: textColor }} className="mt-1 text-2xl">
-            {currentTemperature.toFixed(0)}°
+            {currentTemperature}°
           </Text>
         </View>
       </View>

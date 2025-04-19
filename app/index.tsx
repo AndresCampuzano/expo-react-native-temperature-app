@@ -277,15 +277,19 @@ export default function Index() {
           {/* Today's Min-Max Temperature */}
           {records?.today && (
             <MinMaxTemperature
-              minTemperature={records.today.previous.reduce(
-                (min, item) => Math.min(min, item.temperature),
-                Infinity
+              minTemperature={Math.round(
+                records.today.previous.reduce(
+                  (min, item) => Math.min(min, item.temperature),
+                  Infinity
+                )
               )}
-              maxTemperature={records.today.previous.reduce(
-                (max, item) => Math.max(max, item.temperature),
-                -Infinity
+              maxTemperature={Math.round(
+                records.today.previous.reduce(
+                  (max, item) => Math.max(max, item.temperature),
+                  -Infinity
+                )
               )}
-              currentTemperature={records.today.current.temperature}
+              currentTemperature={Math.round(records.today.current.temperature)}
               textColor={textColor}
               basicUI={false}
             />
@@ -309,15 +313,19 @@ export default function Index() {
                 </Text>
                 <View className="flex flex-row items-center -mt-6">
                   <MinMaxTemperature
-                    minTemperature={records?.tomorrow.reduce(
-                      (min, forecast) => Math.min(min, forecast.temperature),
-                      Infinity
+                    minTemperature={Math.round(
+                      records?.tomorrow.reduce(
+                        (min, forecast) => Math.min(min, forecast.temperature),
+                        Infinity
+                      )
                     )}
-                    maxTemperature={records?.tomorrow.reduce(
-                      (max, forecast) => Math.max(max, forecast.temperature),
-                      -Infinity
+                    maxTemperature={Math.round(
+                      records?.tomorrow.reduce(
+                        (max, forecast) => Math.max(max, forecast.temperature),
+                        -Infinity
+                      )
                     )}
-                    currentTemperature={item.temperature}
+                    currentTemperature={Math.round(item.temperature)}
                     textColor={textColor}
                     basicUI={true}
                   />
@@ -342,6 +350,50 @@ export default function Index() {
           </View>
         </>
       )}
+
+      <MinMaxTemperature
+        minTemperature={1}
+        maxTemperature={10}
+        currentTemperature={1}
+        textColor={textColor}
+        basicUI={false}
+      />
+      <MinMaxTemperature
+        minTemperature={1}
+        maxTemperature={10}
+        currentTemperature={5}
+        textColor={textColor}
+        basicUI={false}
+      />
+      <MinMaxTemperature
+        minTemperature={1}
+        maxTemperature={10}
+        currentTemperature={10}
+        textColor={textColor}
+        basicUI={false}
+      />
+
+      <MinMaxTemperature
+        minTemperature={1}
+        maxTemperature={20}
+        currentTemperature={1}
+        textColor={textColor}
+        basicUI={false}
+      />
+      <MinMaxTemperature
+        minTemperature={1}
+        maxTemperature={20}
+        currentTemperature={10}
+        textColor={textColor}
+        basicUI={false}
+      />
+      <MinMaxTemperature
+        minTemperature={1}
+        maxTemperature={20}
+        currentTemperature={20}
+        textColor={textColor}
+        basicUI={false}
+      />
     </ScrollView>
   );
 }
