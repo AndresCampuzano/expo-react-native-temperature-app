@@ -22,7 +22,7 @@ export const SunEffect = () => {
           { size: 30, top: 100, duration: 10000, delay: 2000 },
           { size: 25, top: 150, duration: 12000, delay: 4000 },
         ]}
-        cloudColor="rgba(255, 255, 255, 0.8)"
+        cloudColor="rgba(255, 255, 255, 0.6)"
       />
     </>
   );

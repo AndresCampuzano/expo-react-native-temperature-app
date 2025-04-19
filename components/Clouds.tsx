@@ -14,8 +14,20 @@ export const Clouds = ({
   const [cloudTops, setCloudTops] = useState(
     cloudConfigs.map(config => config.top + (Math.random() * 10 - 5))
   );
+  const [currentPositions, setCurrentPositions] = useState(
+    cloudConfigs.map(() => -200) // Initial positions
+  );
+
+  const calculateShadowOffset = (translateX: number) => {
+    const centerX = screenWidth / 2;
+    if (translateX < -200) return -10;
+    if (translateX > screenWidth + 100) return 10;
+    return ((translateX - centerX) / centerX) * 10;
+  };
 
   useEffect(() => {
+    const listeners: string[] = [];
+
     cloudConfigs.forEach((config, index) => {
       const animateCloud = (position: Animated.Value) => {
         position.stopAnimation(); // Ensure no overlapping animations
@@ -39,8 +51,22 @@ export const Clouds = ({
           animateCloud(position); // Restart the animation
         });
       };
+
+      // Add a listener to track the current value of the Animated.Value
+      const listenerId = cloudPositions[index].addListener(({ value }) => {
+        setCurrentPositions(prevPositions =>
+          prevPositions.map((pos, i) => (i === index ? value : pos))
+        );
+      });
+      listeners.push(listenerId);
+
       animateCloud(cloudPositions[index]);
     });
+
+    // Cleanup listeners on unmount
+    return () => {
+      listeners.forEach((id, index) => cloudPositions[index].removeListener(id));
+    };
   }, [cloudConfigs, cloudPositions]);
 
   return (
@@ -57,7 +83,10 @@ export const Clouds = ({
             borderRadius: config.size,
             shadowColor: '#000',
             shadowOpacity: 0.06,
-            shadowOffset: { width: 10, height: 10 },
+            shadowOffset: {
+              width: calculateShadowOffset(currentPositions[index]),
+              height: 10,
+            },
             shadowRadius: 0,
             transform: [{ translateX: cloudPositions[index] }],
           }}
