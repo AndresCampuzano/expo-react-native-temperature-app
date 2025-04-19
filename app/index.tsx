@@ -21,6 +21,7 @@ import {
   tomorrowFutureWeather,
   yesterdayWeather,
 } from '@/utils/date';
+import { SquareItem } from '@/components/SquareItem';
 
 export default function Index() {
   const horizontalScrollRef = useRef<ScrollView>(null);
@@ -156,37 +157,26 @@ export default function Index() {
           >
             {/* today's weather */}
             {records?.today.previous?.map(item => (
-              <View
+              <SquareItem
                 key={(item as WeatherHourly).hour}
-                className="m-2 p-4 pb-10 bg-white rounded-lg w-28"
-              >
-                <Text className="text-lg font-bold">{item.temperature.toFixed(0)}°C</Text>
-                <Text className="text-sm text-gray-500">
-                  {new Date((item as WeatherHourly).hour).toLocaleTimeString([], {
-                    hour: 'numeric',
-                    hour12: true,
-                  })}
-                </Text>
-              </View>
+                temperature={item.temperature}
+                humidity={item.humidity}
+                timestamp={(item as WeatherHourly).hour}
+              />
             ))}
             {/* current hour weather */}
-            <View className="m-2 p-4 pb-10 bg-gray-300 rounded-lg w-28">
-              <Text className="text-lg font-bold">
-                {records?.today.current.temperature.toFixed(0)}°C
-              </Text>
-              <Text className="text-sm text-gray-500">Now</Text>
-            </View>
+            <SquareItem
+              temperature={records?.today.current.temperature || 0}
+              humidity={records?.today.current.humidity || 0}
+            />
             {/* today's future weather */}
             {records?.today.future?.map(item => (
-              <View key={item.forecast_for} className="m-2 p-4 pb-10 bg-white rounded-lg w-28">
-                <Text className="text-lg font-bold">{item.temperature.toFixed(0)}°C</Text>
-                <Text className="text-sm text-gray-500">
-                  {new Date(item.forecast_for).toLocaleTimeString([], {
-                    hour: 'numeric',
-                    hour12: true,
-                  })}
-                </Text>
-              </View>
+              <SquareItem
+                key={item.forecast_for}
+                temperature={item.temperature}
+                humidity={item.humidity}
+                timestamp={item.forecast_for}
+              />
             ))}
           </ScrollView>
         </>
