@@ -205,9 +205,9 @@ export default function Index() {
                 width={chartWidth}
                 height={80}
                 chartConfig={{
-                  backgroundColor: 'transparent',
-                  backgroundGradientFrom: 'transparent',
-                  backgroundGradientTo: 'transparent',
+                  backgroundColor: '#F0ECC6',
+                  backgroundGradientFrom: '#F0ECC6',
+                  backgroundGradientTo: '#F0ECC6',
                   decimalPlaces: 1,
                   color: () => '#F8BE28',
                   propsForBackgroundLines: {
