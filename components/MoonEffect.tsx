@@ -1,35 +1,98 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import { Animated, View, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export const MoonEffect = () => {
-  const starOpacity1 = useRef(new Animated.Value(1)).current;
-  const starOpacity2 = useRef(new Animated.Value(1)).current;
-  const starOpacity3 = useRef(new Animated.Value(1)).current;
-  const starOpacity4 = useRef(new Animated.Value(1)).current;
+  const screenWidth = Dimensions.get('window').width;
+
+  // Animated values for star opacity
+  const starOpacity1 = useRef(new Animated.Value(0)).current;
+  const starOpacity2 = useRef(new Animated.Value(0)).current;
+  const starOpacity3 = useRef(new Animated.Value(0)).current;
+  const starOpacity4 = useRef(new Animated.Value(0)).current;
+
+  // Animated values for cloud positions
+  const cloudPosition1 = useRef(new Animated.Value(-200)).current;
+  const cloudPosition2 = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
-    const twinkle = (opacity: Animated.Value, duration: number, delay: number) => {
+    // Animate star opacity
+    const animateStar = (opacity: Animated.Value, delay: number) => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(opacity, {
+            toValue: 1,
+            duration: 1000,
+            delay,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacity, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    };
+
+    animateStar(starOpacity1, 0);
+    animateStar(starOpacity2, 500);
+    animateStar(starOpacity3, 1000);
+    animateStar(starOpacity4, 1500);
+
+    // Animate clouds
+    const animateCloud = (position: Animated.Value, duration: number, delay: number) => {
       Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 0.3,
+        Animated.timing(position, {
+          toValue: screenWidth + 100, // Move off the right side of the screen
           duration,
           delay,
           useNativeDriver: true,
         }),
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration,
+        Animated.timing(position, {
+          toValue: -200, // Reset to the left, off-screen
+          duration: 0,
           useNativeDriver: true,
         }),
-      ]).start(() => twinkle(opacity, duration, delay));
+      ]).start(() => animateCloud(position, duration, delay));
     };
 
-    twinkle(starOpacity1, 1200, 0);
-    twinkle(starOpacity2, 1500, 300);
-    twinkle(starOpacity3, 1000, 600);
-    twinkle(starOpacity4, 1800, 900);
-  }, [starOpacity1, starOpacity2, starOpacity3, starOpacity4]);
+    animateCloud(cloudPosition1, 10000, 0);
+    animateCloud(cloudPosition2, 12000, 3000);
+  }, [
+    starOpacity1,
+    starOpacity2,
+    starOpacity3,
+    starOpacity4,
+    cloudPosition1,
+    cloudPosition2,
+    screenWidth,
+  ]);
+
+  const Cloud = ({
+    position,
+    size,
+    top,
+  }: {
+    position: Animated.Value;
+    size: number;
+    top: number;
+  }) => (
+    <Animated.View
+      style={{
+        position: 'absolute',
+        top,
+        width: size * 4,
+        height: size * 2,
+        backgroundColor: 'rgba(161,181,245,0.2)',
+        borderRadius: size,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        transform: [{ translateX: position }], // Use translateX for horizontal movement
+      }}
+    />
+  );
 
   return (
     <>
@@ -44,6 +107,7 @@ export const MoonEffect = () => {
           zIndex: -1,
         }}
       />
+      {/* Stars */}
       <Animated.View
         style={{
           position: 'absolute',
@@ -104,6 +168,9 @@ export const MoonEffect = () => {
           opacity: starOpacity4,
         }}
       />
+      {/* Clouds */}
+      <Cloud position={cloudPosition1} size={20} top={50} />
+      <Cloud position={cloudPosition2} size={30} top={120} />
     </>
   );
 };
