@@ -11,10 +11,14 @@ export const Clouds = ({
   cloudColor: string;
 }) => {
   const cloudPositions = useRef(cloudConfigs.map(() => new Animated.Value(-200))).current;
+  const [cloudTops, setCloudTops] = useState(
+    cloudConfigs.map(config => config.top + (Math.random() * 10 - 5))
+  );
 
   useEffect(() => {
     cloudConfigs.forEach((config, index) => {
       const animateCloud = (position: Animated.Value) => {
+        position.stopAnimation(); // Ensure no overlapping animations
         Animated.sequence([
           Animated.timing(position, {
             toValue: screenWidth + 100, // Move off the right side of the screen
@@ -28,7 +32,11 @@ export const Clouds = ({
             useNativeDriver: true,
           }),
         ]).start(() => {
-          animateCloud(position);
+          // Update the top position with a new random value
+          setCloudTops(prevTops =>
+            prevTops.map((top, i) => (i === index ? config.top + (Math.random() * 10 - 5) : top))
+          );
+          animateCloud(position); // Restart the animation
         });
       };
       animateCloud(cloudPositions[index]);
@@ -42,16 +50,15 @@ export const Clouds = ({
           key={index}
           style={{
             position: 'absolute',
-            top: config.top,
+            top: cloudTops[index],
             width: config.size * 4,
             height: config.size * 2,
             backgroundColor: cloudColor,
             borderRadius: config.size,
-            // Updated shadow effect
             shadowColor: '#000',
-            shadowOpacity: 0.08,
-            shadowOffset: { width: 10, height: 10 }, // Simulates light from top-right
-            shadowRadius: 0, // Remove blur for a sharp shadow
+            shadowOpacity: 0.06,
+            shadowOffset: { width: 10, height: 10 },
+            shadowRadius: 0,
             transform: [{ translateX: cloudPositions[index] }],
           }}
         />

@@ -13,7 +13,7 @@ export const SquareItem = ({
   textColor: string;
 }) => {
   const colorScheme = useColorScheme();
-  const dropIconColor = colorScheme === 'dark' ? '#607ce5' : '#e5ae23';
+  const dropIconColor = colorScheme === 'dark' ? '#607ce5' : '#f1b72a';
 
   return (
     <View key={timestamp} className="m-2 p-4 pb-10 rounded-lg w-28 flex">
