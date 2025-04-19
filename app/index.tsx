@@ -2,41 +2,81 @@ import { ScrollView, Text, View, ActivityIndicator, RefreshControl } from 'react
 import { MapPinIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useQuery } from '@tanstack/react-query';
-import { getLast48HoursWeatherRecords } from '@/api/weather.service';
+import {
+  getFutureWeatherRecords,
+  getLast48HoursAverageWeatherRecords,
+} from '@/api/weather.service';
 import { useEffect, useState } from 'react';
-import { calculateHourlyAverages, todayWeather } from '@/utils/date';
+import {
+  todayWeather,
+  todayWeatherWithoutCurrentHourWeather,
+  yesterdayWeather,
+} from '@/utils/date';
 
 export default function Index() {
-  const [lastRecord, setLastRecord] = useState<Weather | null>(null);
-  const [realRecords, setRealRecords] = useState<WeatherHourly[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [records, setRecords] = useState<{
+    yesterday: (WeatherHourly | Weather)[];
+    today: {
+      previous: (WeatherHourly | Weather)[];
+      current: WeatherHourly | Weather;
+      future: FutureWeather;
+    };
+  } | null>(null);
 
-  const { data, isLoading, isError, refetch } = useQuery({
+  const {
+    data: hourlyRealData,
+    isLoading: isLoadingHourlyRealData,
+    isError: isErrorHourlyRealData,
+    refetch: refetchHourlyRealData,
+  } = useQuery({
     queryKey: ['weather'],
-    queryFn: getLast48HoursWeatherRecords,
+    queryFn: getLast48HoursAverageWeatherRecords,
   });
 
-  // Refetch every 30 seconds
+  const {
+    data: hourlyFutureData,
+    isLoading: isLoadingHourlyFutureData,
+    isError: isErrorHourlyFutureData,
+    refetch: refetchHourlyFutureData,
+  } = useQuery({
+    queryKey: ['weather-future'],
+    queryFn: getFutureWeatherRecords,
+  });
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [refetch]);
-
-  useEffect(() => {
-    if (data && !isLoading && !isError) {
-      setRealRecords(calculateHourlyAverages(todayWeather(data)));
-
-      const lastRecord = data[data.length - 1];
-      setLastRecord(lastRecord);
+    if (
+      hourlyRealData &&
+      !isLoadingHourlyRealData &&
+      !isErrorHourlyRealData &&
+      hourlyFutureData &&
+      !isLoadingHourlyFutureData &&
+      !isErrorHourlyFutureData
+    ) {
+      const obj = {
+        yesterday: yesterdayWeather(hourlyRealData),
+        today: {
+          previous: todayWeatherWithoutCurrentHourWeather(hourlyRealData),
+          current: todayWeather(hourlyRealData)[todayWeather(hourlyRealData).length - 1],
+          future: hourlyFutureData,
+        },
+      };
+      console.log(obj.today.future);
+      setRecords(obj);
     }
-  }, [data, isLoading, isError]);
+  }, [
+    hourlyRealData,
+    isLoadingHourlyRealData,
+    isErrorHourlyRealData,
+    hourlyFutureData,
+    isLoadingHourlyFutureData,
+    isErrorHourlyFutureData,
+    refetchHourlyFutureData,
+  ]);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await refetch();
+    await refetchHourlyRealData();
     setRefreshing(false);
   };
 
@@ -45,7 +85,7 @@ export default function Index() {
       style={{ flex: 1 }}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-      {isLoading ? (
+      {isLoadingHourlyRealData || isLoadingHourlyFutureData ? (
         <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="black" />
         </View>
@@ -68,7 +108,7 @@ export default function Index() {
               <View className={'my-3 flex flex-row'}>
                 <View>
                   <Text className={'text-[200px] font-extralight'}>
-                    {lastRecord?.temperature.toFixed(0)}
+                    {records?.today.current.temperature.toFixed(0)}
                   </Text>
                 </View>
                 <View>
@@ -82,14 +122,26 @@ export default function Index() {
             </View>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={true} className="mt-4">
-            {realRecords?.map(item => (
-              <View key={item.hour} className="m-2 p-4 bg-white rounded-lg w-28">
+            {records?.today.previous?.map(item => (
+              <View
+                key={(item as WeatherHourly).hour}
+                className="m-2 p-4 pb-10 bg-white rounded-lg w-28"
+              >
                 <Text className="text-lg font-bold">{item.temperature.toFixed(0)}°C</Text>
                 <Text className="text-sm text-gray-500">
-                  {new Date(item.hour).toLocaleString()}
+                  {new Date((item as WeatherHourly).hour).toLocaleTimeString([], {
+                    hour: 'numeric',
+                    hour12: true,
+                  })}
                 </Text>
               </View>
             ))}
+            <View className="m-2 p-4 pb-10 bg-gray-300 rounded-lg w-28">
+              <Text className="text-lg font-bold">
+                {records?.today.current.temperature.toFixed(0)}°C
+              </Text>
+              <Text className="text-sm text-gray-500">Now</Text>
+            </View>
           </ScrollView>
         </>
       )}

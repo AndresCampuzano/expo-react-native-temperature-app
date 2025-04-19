@@ -11,3 +11,12 @@ interface WeatherHourly {
   humidity: number;
   temperature: number;
 }
+
+interface FutureWeather {
+  id: string;
+  city_id: string;
+  temperature: number;
+  humidity: number;
+  forecast_for: string;
+  created_at: string;
+}
