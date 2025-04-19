@@ -27,6 +27,7 @@ import { MoonEffect } from '@/components/MoonEffect';
 import { SunEffect } from '@/components/SunEffect';
 import { DropIcon } from '@/assets/icons/DropIcon';
 import { Clouds } from '@/components/Clouds';
+import { MinMaxTemperature } from '@/components/MinMaxTemperature';
 
 export default function Index() {
   const unifiedScrollRef = useRef<ScrollView>(null);
@@ -272,6 +273,23 @@ export default function Index() {
               </View>
             </View>
           </ScrollView>
+
+          {/* Today's Min-Max Temperature */}
+          {records?.today && (
+            <MinMaxTemperature
+              minTemperature={records.today.previous.reduce(
+                (min, item) => Math.min(min, item.temperature),
+                Infinity
+              )}
+              maxTemperature={records.today.previous.reduce(
+                (max, item) => Math.max(max, item.temperature),
+                -Infinity
+              )}
+              currentTemperature={records.today.current.temperature}
+              textColor={textColor}
+              basicUI={false}
+            />
+          )}
 
           {/* Tomorrow's Forecast Table */}
           <Text style={{ color: textColor }} className={'w-full text-center mt-9 text-2xl'}>
