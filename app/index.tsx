@@ -191,19 +191,17 @@ export default function Index() {
             </View>
           </View>
 
-          {/* Unified ScrollView */}
           <ScrollView
             ref={unifiedScrollRef}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ width: chartWidth }}
           >
-            <View>
-              {/* Chart */}
+            <View style={{ flex: 1, marginHorizontal: 0, paddingHorizontal: 0 }}>
               <LineChart
                 data={chartData}
-                width={chartWidth}
-                height={80}
+                width={chartWidth + 50}
+                height={70}
                 chartConfig={{
                   backgroundColor: '#F0ECC6',
                   backgroundGradientFrom: '#F0ECC6',
@@ -214,9 +212,13 @@ export default function Index() {
                     strokeWidth: 0,
                   },
                 }}
+                withHorizontalLabels={false}
+                withVerticalLabels={false}
                 bezier
+                style={{
+                  marginLeft: -20,
+                }}
               />
-              {/* Data */}
               <View className="flex-row mt-4">
                 {/* today's weather */}
                 {records?.today.previous?.map(item => (
