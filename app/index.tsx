@@ -226,8 +226,9 @@ export default function Index() {
                   backgroundColor,
                   backgroundGradientFrom: backgroundColor,
                   backgroundGradientTo: backgroundColor,
-                  decimalPlaces: 1,
                   color: () => chartBackgroundColor,
+                  fillShadowGradient: chartBackgroundColor,
+                  fillShadowGradientOpacity: 0.4,
                   propsForBackgroundLines: {
                     strokeWidth: 0,
                   },
