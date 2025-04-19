@@ -68,3 +68,22 @@ export function todayFutureWeather(
     );
   });
 }
+
+/**
+ * Get the future weather records for tomorrow.
+ */
+export function tomorrowFutureWeather(data: FutureWeather[]): FutureWeather[] {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const startOfTomorrow = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
+  const endOfTomorrow = new Date(
+    tomorrow.getFullYear(),
+    tomorrow.getMonth(),
+    tomorrow.getDate() + 1
+  );
+
+  return data.filter(record => {
+    const recordDate = new Date(record.forecast_for);
+    return recordDate >= startOfTomorrow && recordDate < endOfTomorrow;
+  });
+}

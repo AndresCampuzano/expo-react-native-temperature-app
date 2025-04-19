@@ -1,4 +1,11 @@
-import { ScrollView, Text, View, ActivityIndicator, RefreshControl } from 'react-native';
+import {
+  ScrollView,
+  Text,
+  View,
+  ActivityIndicator,
+  RefreshControl,
+  Dimensions,
+} from 'react-native';
 import { MapPinIcon } from 'react-native-heroicons/outline';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useQuery } from '@tanstack/react-query';
@@ -6,15 +13,17 @@ import {
   getFutureWeatherRecords,
   getLast48HoursAverageWeatherRecords,
 } from '@/api/weather.service';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   todayFutureWeather,
   todayWeather,
   todayWeatherWithoutCurrentHourWeather,
+  tomorrowFutureWeather,
   yesterdayWeather,
 } from '@/utils/date';
 
 export default function Index() {
+  const horizontalScrollRef = useRef<ScrollView>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [records, setRecords] = useState<{
     yesterday: (WeatherHourly | Weather)[];
@@ -23,7 +32,10 @@ export default function Index() {
       current: WeatherHourly | Weather;
       future: FutureWeather[];
     };
+    tomorrow: FutureWeather[];
   } | null>(null);
+
+  const screenWidth = Dimensions.get('window').width; // Dynamically get screen width
 
   const {
     data: hourlyRealData,
@@ -61,6 +73,7 @@ export default function Index() {
           current: todayWeather(hourlyRealData)[todayWeather(hourlyRealData).length - 1],
           future: todayFutureWeather(hourlyFutureData, hourlyRealData),
         },
+        tomorrow: tomorrowFutureWeather(hourlyFutureData),
       };
       setRecords(obj);
     }
@@ -73,6 +86,20 @@ export default function Index() {
     isErrorHourlyFutureData,
     refetchHourlyFutureData,
   ]);
+
+  useEffect(() => {
+    if (horizontalScrollRef.current && records?.today.previous.length) {
+      // Scroll to center the "Now" section
+      setTimeout(() => {
+        const itemWidth = 112; // Approximate width of each card
+        const offset = (screenWidth - itemWidth) / 2; // Calculate offset to center the item
+        horizontalScrollRef.current?.scrollTo({
+          x: records.today.previous.length * itemWidth - offset,
+          animated: true,
+        });
+      }, 100); // Delay to ensure layout is ready
+    }
+  }, [records, screenWidth]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -121,7 +148,12 @@ export default function Index() {
               </View>
             </View>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={true} className="mt-4">
+          <ScrollView
+            ref={horizontalScrollRef}
+            horizontal
+            showsHorizontalScrollIndicator={true}
+            className="mt-4"
+          >
             {/* today's weather */}
             {records?.today.previous?.map(item => (
               <View
@@ -144,7 +176,7 @@ export default function Index() {
               </Text>
               <Text className="text-sm text-gray-500">Now</Text>
             </View>
-            {/* future weather */}
+            {/* today's future weather */}
             {records?.today.future?.map(item => (
               <View key={item.forecast_for} className="m-2 p-4 pb-10 bg-white rounded-lg w-28">
                 <Text className="text-lg font-bold">{item.temperature.toFixed(0)}°C</Text>
