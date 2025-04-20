@@ -48,7 +48,10 @@ export default function Index() {
   const textColor = colorScheme === 'dark' ? '#FFFFFF' : '#000000';
   const chartLineColor = colorScheme === 'dark' ? '#d7d7d7' : '#F8BE28';
   const chartBackgroundColor = colorScheme === 'dark' ? '#b6b6b6' : '#F8BE28';
-  const cloudsColor = colorScheme === 'dark' ? 'rgba(161,181,245,0.3)' : 'rgba(255, 255, 255, 0.4)';
+  const tableCloudsColor =
+    colorScheme === 'dark' ? 'rgba(161,181,245,0.3)' : 'rgba(255, 255, 255, 0.4)';
+  const heroCloudsColor =
+    colorScheme === 'dark' ? 'rgba(161,181,245,0.2)' : 'rgba(255, 255, 255, 0.6)';
 
   const {
     data: hourlyRealData,
@@ -185,6 +188,14 @@ export default function Index() {
           </Text>
           <View className={'relative flex justify-center flex-col mb-[5%]'}>
             {colorScheme === 'dark' ? <MoonEffect /> : <SunEffect />}
+            <Clouds
+              cloudConfigs={[
+                { size: 20, top: 50, duration: 10000, delay: 0 },
+                { size: 30, top: 120, duration: 12000, delay: 3000 },
+                { size: 25, top: 230, duration: 9000, delay: 5300 },
+              ]}
+              cloudColor={heroCloudsColor}
+            />
             <View className={'flex flex-col justify-center items-center text-center'}>
               <View className={'mb-10 flex flex-row'}>
                 <View>
@@ -299,11 +310,13 @@ export default function Index() {
           <Text style={{ color: textColor }} className={'w-full text-center mt-9 text-2xl'}>
             Tomorrow's Forecast
           </Text>
-          <View className="mt-4 relative">
-            {records?.tomorrow.map(item => (
+          <View className="my-4 relative mb-10">
+            {records?.tomorrow.map((item, index) => (
               <View
                 key={item.forecast_for}
-                className="flex flex-row justify-between items-center px-4 py-2 border-b border-gray-500"
+                className={`flex flex-row justify-between items-center px-4 py-2 ${
+                  index !== records?.tomorrow.length - 1 ? 'border-b border-gray-500' : ''
+                }`}
               >
                 <Text style={{ color: textColor }} className="text-lg w-20">
                   {new Date(item.forecast_for).toLocaleTimeString([], {
@@ -345,7 +358,7 @@ export default function Index() {
                 { size: 12, top: 800, duration: 10000, delay: 2000 },
                 { size: 25, top: 450, duration: 12000, delay: 4000 },
               ]}
-              cloudColor={cloudsColor}
+              cloudColor={tableCloudsColor}
             />
           </View>
         </>

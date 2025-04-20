@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Clouds } from './Clouds';
 
 export const MoonEffect = () => {
   const starOpacity1 = useRef(new Animated.Value(0)).current;
@@ -107,15 +106,6 @@ export const MoonEffect = () => {
           shadowRadius: 12,
           opacity: starOpacity4,
         }}
-      />
-      {/* Clouds */}
-      <Clouds
-        cloudConfigs={[
-          { size: 20, top: 50, duration: 10000, delay: 0 },
-          { size: 30, top: 120, duration: 12000, delay: 3000 },
-          { size: 25, top: 230, duration: 9000, delay: 5300 },
-        ]}
-        cloudColor="rgba(161,181,245,0.2)"
       />
     </>
   );
