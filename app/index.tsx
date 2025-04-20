@@ -48,8 +48,6 @@ export default function Index() {
   const textColor = colorScheme === 'dark' ? '#FFFFFF' : '#000000';
   const chartLineColor = colorScheme === 'dark' ? '#d7d7d7' : '#F8BE28';
   const chartBackgroundColor = colorScheme === 'dark' ? '#b6b6b6' : '#F8BE28';
-  const tableCloudsColor =
-    colorScheme === 'dark' ? 'rgba(161,181,245,0.3)' : 'rgba(255, 255, 255, 0.4)';
   const heroCloudsColor =
     colorScheme === 'dark' ? 'rgba(161,181,245,0.2)' : 'rgba(255, 255, 255, 0.6)';
 
@@ -351,15 +349,6 @@ export default function Index() {
                 </View>
               </View>
             ))}
-            <Clouds
-              cloudConfigs={[
-                { size: 20, top: 320, duration: 8000, delay: 0 },
-                { size: 30, top: 180, duration: 10000, delay: 2000 },
-                { size: 12, top: 800, duration: 10000, delay: 2000 },
-                { size: 25, top: 450, duration: 12000, delay: 4000 },
-              ]}
-              cloudColor={tableCloudsColor}
-            />
           </View>
         </>
       )}
