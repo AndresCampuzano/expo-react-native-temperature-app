@@ -18,7 +18,7 @@ export const MinMaxTemperature: React.FC<MinMaxTemperatureProps> = ({
   basicUI,
 }) => {
   const colorScheme = useColorScheme();
-  const markerBgColor = colorScheme === 'dark' ? '#c8cfdc' : '#5e5e5e';
+  const markerBgColor = colorScheme === 'dark' ? '#c8cfdc' : '#ecebeb';
 
   const markerPosition =
     ((currentTemperature - minTemperature) / (maxTemperature - minTemperature)) * 100 - 3;
@@ -56,6 +56,7 @@ export const MinMaxTemperature: React.FC<MinMaxTemperatureProps> = ({
           }}
         >
           <View
+            className={'shadow-md'}
             style={{ width: 6, height: 20, borderRadius: 9999, backgroundColor: markerBgColor }}
           />
           <Text

@@ -251,7 +251,7 @@ export default function Index() {
                     humidity={item.humidity}
                     timestamp={(item as WeatherHourly).hour}
                     textColor={textColor}
-                    className="opacity-60"
+                    className="opacity-50"
                   />
                 ))}
                 {/* current hour weather */}
